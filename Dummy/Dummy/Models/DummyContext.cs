@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Dummy.Models
 {
-    public class DummyContext
+    public class DummyContext : DbContext
     {
         public DummyContext(DbContextOptions<DummyContext> options)
-            : base(options)
+           : base(options)
         {
         }
 
