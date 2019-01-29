@@ -21,6 +21,10 @@ namespace Dummy.Controllers
             _context = context;
         }
 
+        public DummyModelsController()
+        {
+        }
+
         // GET: api/DummyModels
         [HttpGet]
         public async Task<ActionResult<IEnumerable<DummyModel>>> GetTodoItems()
@@ -30,6 +34,7 @@ namespace Dummy.Controllers
 
         // GET: api/DummyModels/5
         [HttpGet("{id}")]
+        [Route("users/getUser")]
         public async Task<ActionResult<DummyModel>> GetDummyModel(long id)
         {
             var dummyModel = await _context.UserTest.FindAsync(id);
@@ -44,6 +49,7 @@ namespace Dummy.Controllers
 
         // PUT: api/DummyModels/5
         [HttpPut("{id}")]
+        [Route("users/editUser")]
         public async Task<IActionResult> PutDummyModel(long id,[FromBody] DummyModel dummyModel)
         {
            
@@ -59,11 +65,20 @@ namespace Dummy.Controllers
             return NoContent();
             
         }
+        [HttpPost]
+        [Route("users/register")]
+        public async Task<ActionResult<DummyModel>> Register(DummyModel dummyModel)
+        {
+            _context.UserTest.Add(dummyModel);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetDummyModel", new { id = dummyModel.Id }, dummyModel);
+        }
 
         // POST: api/DummyModels
         [HttpPost]
-        [Route("login")]
-        public async Task<ActionResult<DummyModel>> PostDummyModel(DummyModel dummyModel)
+        [Route("users/login")]
+        public async Task<ActionResult<DummyModel>> Login(DummyModel dummyModel)
         {
             var user = _context.UserTest.FirstOrDefault(x => x.Username == dummyModel.Username);
             var password = _authentication.VerifyPassword(dummyModel.Password, user?.Password);
@@ -77,6 +92,7 @@ namespace Dummy.Controllers
         }
         // DELETE: api/DummyModels/5
         [HttpDelete("{id}")]
+        [Route("users/delete")]
         public async Task<ActionResult<DummyModel>> DeleteDummyModel(long id)
         {
             var dummyModel = await _context.UserTest.FindAsync(id);

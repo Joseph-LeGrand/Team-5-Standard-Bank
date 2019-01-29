@@ -1,6 +1,7 @@
 using Dummy.Controllers;
 using Dummy.Models;
 using NUnit.Framework;
+using System.Threading.Tasks;
 
 namespace Tests
 {
@@ -13,11 +14,13 @@ namespace Tests
         }
 
         [Test]
-        public void Test1()
+        public void Test()
         {
+
             //Arrange
-            var testLogin = new DummyModelsController.PostDummyModel(_context);
+            var testLogin = new DummyModelsController();
             //Act
+         
             //Assert
         }
     }
