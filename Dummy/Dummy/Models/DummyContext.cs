@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +13,6 @@ namespace Dummy.Models
         {
         }
 
-        public DbSet<DummyModel> TodoItems { get; set; }
+        public DbSet<DummyModel> UserTest { get; set; }
     }
 }
