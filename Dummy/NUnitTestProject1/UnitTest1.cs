@@ -7,23 +7,23 @@ namespace Tests
     public class Tests
     {
         private DummyModelsController _dmC;
-        private DummyContext _context;
+        private static DummyModel _context;
 
         [SetUp]
         public void Setup()
         {
 
         }
-
         [Test]
-        public async System.Threading.Tasks.Task Test1Async()
+        public async System.Threading.Tasks.Task Test1Async(string username)
         {
             //Arrange
-            var dummyController = new DummyModelsController(_context);
+            var dummyController = new DummyModelsController();
+          
             //Act
-            await dummyController.PostDummyModel("" , "");
-
-            Assert.Pass();
+            var check = await dummyController.Login(_context);
+            //Assert
+            Assert.IsTrue(check);
         }
     }
 }
