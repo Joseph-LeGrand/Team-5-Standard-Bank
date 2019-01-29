@@ -15,6 +15,7 @@ namespace Dummy.Controllers
     {
         private DummyContext _context;
         private Authentication _authentication;
+        private DummyModel _dummy;
 
         public DummyModelsController(DummyContext context)
         {
