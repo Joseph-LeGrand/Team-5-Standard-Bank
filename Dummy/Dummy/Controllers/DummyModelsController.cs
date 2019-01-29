@@ -14,6 +14,7 @@ namespace Dummy.Controllers
     public class DummyModelsController : ControllerBase
     {
         private DummyContext _context;
+        private Authentication _authentication;
 
         public DummyModelsController(DummyContext context)
         {
@@ -45,30 +46,7 @@ namespace Dummy.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutDummyModel(long id,[FromBody] DummyModel dummyModel)
         {
-            /* if (id != dummyModel.Id)
-             {
-                 return BadRequest();
-             }
-
-             _context.Entry(dummyModel).State = EntityState.Modified;
-
-             try
-             {
-                 await _context.SaveChangesAsync();
-             }
-             catch (DbUpdateConcurrencyException)
-             {
-                 if (!DummyModelExists(id))
-                 {
-                     return NotFound();
-                 }
-                 else
-                 {
-                     throw;
-                 }
-             }
-
-             return NoContent();*/
+           
 
             var entry = _context.UserTest.FirstOrDefault(x => x.Id == id);
             entry.FirstName = dummyModel.FirstName;
@@ -84,14 +62,19 @@ namespace Dummy.Controllers
 
         // POST: api/DummyModels
         [HttpPost]
+        [Route("login")]
         public async Task<ActionResult<DummyModel>> PostDummyModel(DummyModel dummyModel)
         {
-            _context.UserTest.Add(dummyModel);
-            await _context.SaveChangesAsync();
+            var user = _context.UserTest.FirstOrDefault(x => x.Username == dummyModel.Username);
+            var password = _authentication.VerifyPassword(dummyModel.Password, user?.Password);
 
-            return CreatedAtAction("GetDummyModel", new { id = dummyModel.Id }, dummyModel);
+            if (!password) {
+
+                ModelState.AddModelError("", "The username/password is incorrect");
+            }
+
+            return CreatedAtAction("my loggin", user);
         }
-
         // DELETE: api/DummyModels/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<DummyModel>> DeleteDummyModel(long id)

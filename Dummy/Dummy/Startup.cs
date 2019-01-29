@@ -34,6 +34,7 @@ namespace Dummy
 
             services.AddDbContext<DummyContext>
                  (options => options.UseSqlServer(connection));
+            services.AddCors();
 
           
         }
@@ -51,7 +52,23 @@ namespace Dummy
                 app.UseHsts();
             }
 
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseHsts();
+            }
+
+
             app.UseHttpsRedirection();
+            if (Configuration["EnableCORS"] == "True")
+            {
+                app.UseCors(o => o.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader());
+            }
             app.UseMvc();
             app.UseSwagger();
             app.UseSwaggerUI(x =>
