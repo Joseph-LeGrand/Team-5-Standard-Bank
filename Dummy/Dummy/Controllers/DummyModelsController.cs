@@ -65,11 +65,20 @@ namespace Dummy.Controllers
             return NoContent();
             
         }
+        [HttpPost]
+        [Route("users/register")]
+        public async Task<ActionResult<DummyModel>> Register(DummyModel dummyModel)
+        {
+            _context.UserTest.Add(dummyModel);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetDummyModel", new { id = dummyModel.Id }, dummyModel);
+        }
 
         // POST: api/DummyModels
         [HttpPost]
         [Route("users/login")]
-        public async Task<ActionResult<DummyModel>> PostDummyModel(DummyModel dummyModel)
+        public async Task<ActionResult<DummyModel>> Login(DummyModel dummyModel)
         {
             var user = _context.UserTest.FirstOrDefault(x => x.Username == dummyModel.Username);
             var password = _authentication.VerifyPassword(dummyModel.Password, user?.Password);
