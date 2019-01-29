@@ -16,7 +16,7 @@ namespace Tests
         public void Test1()
         {
             //Arrange
-            var testLogin = new DummyModelsController.PostDummyModel(_context);
+            var testLogin = new DummyModelsController.
             //Act
             //Assert
         }
