@@ -65,14 +65,18 @@ namespace Dummy.Controllers
             return NoContent();
             
         }
+
         [HttpPost]
         [Route("users/register")]
         public async Task<ActionResult<DummyModel>> Register(DummyModel dummyModel)
         {
             _context.UserTest.Add(dummyModel);
+            _context.User_Test.Add(dummyModel);
             await _context.SaveChangesAsync();
 
+            var dModel = _context.UserTest.FirstOrDefault(user => user.Username == dummyModel.Username);
             return CreatedAtAction("GetDummyModel", new { id = dummyModel.Id }, dummyModel);
+           // return dModel;
         }
 
         // POST: api/DummyModels
@@ -110,6 +114,11 @@ namespace Dummy.Controllers
         private bool DummyModelExists(long id)
         {
             return _context.UserTest.Any(e => e.Id == id);
+        }
+
+        public string Init()
+        {
+            return "Intial Test works";
         }
     }
 }
