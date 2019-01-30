@@ -1,13 +1,14 @@
 using Dummy.Controllers;
 using Dummy.Models;
 using NUnit.Framework;
+using System.Linq;
 
 namespace Tests
 {
     public class Tests
     {
         private DummyModelsController _dmC;
-        private DummyContext _context;
+        
 
         [SetUp]
         public void Setup()
@@ -15,15 +16,21 @@ namespace Tests
 
         }
 
-        [Test]
-        public async System.Threading.Tasks.Task Test1Async()
+        [TestCase(1, "Test", "Test", "Test", "Test")]
+        public async System.Threading.Tasks.Task Test_Logins_Async(int id, string firstName, string lastName, string username, string password)
         {
-            //Arrange
-            var dummyController = new DummyModelsController(_context);
-            //Act
-            await dummyController.PostDummyModel("" , "");
+        //    //Arrange
+        //    var dummyController = new DummyModelsController();
+        //    var dummyModel = new DummyModel();
+        //    private Dummy.Authentication _authentication;
+        //private DummyContext _context;
 
-            Assert.Pass();
+        ////Act
+        //var user = _context.UserTest.FirstOrDefault(x => x.Username == dummyModel.Username);
+        //var expectedPassword = _authentication.VerifyPassword(dummyModel.Password, user?.Password);
+        //await dummyController.Login(_context);
+        ////Assert
+        //Assert.Pass();
         }
     }
 }

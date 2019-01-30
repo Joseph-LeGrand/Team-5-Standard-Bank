@@ -21,9 +21,9 @@ namespace Dummy.Controllers
             _context = context;
         }
 
-        public DummyModelsController()
-        {
-        }
+        //public DummyModelsController()
+        //{
+        //}
 
         // GET: api/DummyModels
         [HttpGet]
@@ -69,6 +69,10 @@ namespace Dummy.Controllers
         [Route("users/register")]
         public async Task<ActionResult<DummyModel>> Register(DummyModel dummyModel)
         {
+            string salt = Salt.Create();
+            string passwordHash = Hash.Create(dummyModel.Password, salt);
+            dummyModel.Password = passwordHash;
+            dummyModel.Salt = salt;
             _context.UserTest.Add(dummyModel);
             await _context.SaveChangesAsync();
 
@@ -78,10 +82,10 @@ namespace Dummy.Controllers
         // POST: api/DummyModels
         [HttpPost]
         [Route("users/login")]
-        public async Task<ActionResult<DummyModel>> Login(DummyModel dummyModel)
+        public async Task<ActionResult<DummyModel>> Login([FromBody] DummyModel dummyModel)
         {
             var user = _context.UserTest.FirstOrDefault(x => x.Username == dummyModel.Username);
-            var password = _authentication.VerifyPassword(dummyModel.Password, user?.Password);
+            var password = _authentication.VerifyPassword(Hash.Create(dummyModel.Password, user?.Salt), user?.Password);
 
             if (!password) {
 
@@ -111,5 +115,7 @@ namespace Dummy.Controllers
         {
             return _context.UserTest.Any(e => e.Id == id);
         }
+
+
     }
 }
