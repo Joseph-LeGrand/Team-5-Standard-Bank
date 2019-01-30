@@ -21,9 +21,9 @@ namespace Dummy.Controllers
             _context = context;
         }
 
-        //public DummyModelsController()
-        //{
-        //}
+        public DummyModelsController()
+        {
+        }
 
         // GET: api/DummyModels
         [HttpGet]
@@ -65,27 +65,27 @@ namespace Dummy.Controllers
             return NoContent();
             
         }
+
         [HttpPost]
         [Route("users/register")]
         public async Task<ActionResult<DummyModel>> Register(DummyModel dummyModel)
         {
-            string salt = Salt.Create();
-            string passwordHash = Hash.Create(dummyModel.Password, salt);
-            dummyModel.Password = passwordHash;
-            dummyModel.Salt = salt;
             _context.UserTest.Add(dummyModel);
+            _context.User_Test.Add(dummyModel);
             await _context.SaveChangesAsync();
 
+            var dModel = _context.UserTest.FirstOrDefault(user => user.Username == dummyModel.Username);
             return CreatedAtAction("GetDummyModel", new { id = dummyModel.Id }, dummyModel);
+           // return dModel;
         }
 
         // POST: api/DummyModels
         [HttpPost]
         [Route("users/login")]
-        public async Task<ActionResult<DummyModel>> Login([FromBody] DummyModel dummyModel)
+        public async Task<ActionResult<DummyModel>> Login(DummyModel dummyModel)
         {
             var user = _context.UserTest.FirstOrDefault(x => x.Username == dummyModel.Username);
-            var password = _authentication.VerifyPassword(Hash.Create(dummyModel.Password, user?.Salt), user?.Password);
+            var password = _authentication.VerifyPassword(dummyModel.Password, user?.Password);
 
             if (!password) {
 
@@ -116,6 +116,9 @@ namespace Dummy.Controllers
             return _context.UserTest.Any(e => e.Id == id);
         }
 
-
+        public string Init()
+        {
+            return "Intial Test works";
+        }
     }
 }
