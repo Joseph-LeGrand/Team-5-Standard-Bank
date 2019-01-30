@@ -36,7 +36,7 @@ namespace Dummy.Controllers
         // GET: api/DummyModels/5
         [HttpGet("{id}")]
         [Route("users/getUser")]
-        public async Task<ActionResult<DummyModel>> GetDummyModel(long id)
+        public async Task<ActionResult<DummyModel>> GetDummyModel([FromQuery]long id)
         {
             var dummyModel = await _context.UserTest.FindAsync(id);
 
