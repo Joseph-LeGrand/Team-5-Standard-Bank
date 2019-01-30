@@ -81,20 +81,18 @@ namespace Dummy.Controllers
 
         // POST: api/DummyModels
         [HttpPost]
-        [Route("users/Login")]
-        public async Task<ActionResult<DummyModel>> Login(string username, string pass)
+        [Route("users/login")]
+        public async Task<ActionResult<DummyModel>> Login([FromBody] DummyModel dummyModel)
         {
-            var user = _context.UserTest.FirstOrDefault(x => x.Username == username);
-            string passwordHash = Hash.Create(pass, user.Salt);
-            //var password = _authentication.VerifyPassword(passwordHash, user.Password);
+            var user = _context.UserTest.FirstOrDefault(x => x.Username == dummyModel.Username);
+            var password = _authentication.VerifyPassword(Hash.Create(dummyModel.Password, user?.Salt), user?.Password);
 
-
-            if (passwordHash != user.Password) {
+            if (!password) {
 
                 ModelState.AddModelError("", "The username/password is incorrect");
             }
-            return Ok(user);
-            //return CreatedAtAction("User logged in", new { id = user.Id }, user);
+
+            return CreatedAtAction("my loggin", user);
         }
         // DELETE: api/DummyModels/5
         [HttpDelete("{id}")]
