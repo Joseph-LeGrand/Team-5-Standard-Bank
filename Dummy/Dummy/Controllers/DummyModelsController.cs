@@ -22,9 +22,9 @@ namespace Dummy.Controllers
             _context = context;
         }
 
-        public DummyModelsController()
-        {
-        }
+        //public DummyModelsController()
+        //{
+        //}
 
         // GET: api/DummyModels
         [HttpGet]
@@ -36,7 +36,7 @@ namespace Dummy.Controllers
         // GET: api/DummyModels/5
         [HttpGet("{id}")]
         [Route("users/getUser")]
-        public async Task<ActionResult<DummyModel>> GetDummyModel(long id)
+        public async Task<ActionResult<DummyModel>> GetDummyModel([FromQuery]long id)
         {
             var dummyModel = await _context.UserTest.FindAsync(id);
 
@@ -70,6 +70,10 @@ namespace Dummy.Controllers
         [Route("users/register")]
         public async Task<ActionResult<DummyModel>> Register(DummyModel dummyModel)
         {
+            string salt = Salt.Create();
+            string passwordHash = Hash.Create(dummyModel.Password, salt);
+            dummyModel.Password = passwordHash;
+            dummyModel.Salt = salt;
             _context.UserTest.Add(dummyModel);
             await _context.SaveChangesAsync();
 
@@ -78,18 +82,21 @@ namespace Dummy.Controllers
 
         // POST: api/DummyModels
         [HttpPost]
-        [Route("users/login")]
-        public async Task<ActionResult<DummyModel>> Login(DummyModel dummyModel)
+        [Route("users/Login")]
+        public async Task<ActionResult<DummyModel>> Login(string username, string pass)
         {
-            var user = _context.UserTest.FirstOrDefault(x => x.Username == dummyModel.Username);
-            var password = _authentication.VerifyPassword(dummyModel.Password, user?.Password);
+            var user = _context.UserTest.FirstOrDefault(x => x.Username == username);
+            string passwordHash = Hash.Create(pass, user.Salt);
+            //var password = _authentication.VerifyPassword(passwordHash, user.Password);
 
-            if (!password) {
+
+            if (passwordHash != user.Password)
+            {
 
                 ModelState.AddModelError("", "The username/password is incorrect");
             }
-
-            return CreatedAtAction("my loggin", user);
+            return Ok(user);
+            //return CreatedAtAction("User logged in", new { id = user.Id }, user);
         }
         // DELETE: api/DummyModels/5
         [HttpDelete("{id}")]
@@ -112,5 +119,7 @@ namespace Dummy.Controllers
         {
             return _context.UserTest.Any(e => e.Id == id);
         }
+
+
     }
 }
