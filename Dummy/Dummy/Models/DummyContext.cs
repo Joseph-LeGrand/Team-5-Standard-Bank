@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Dummy.Models
 {
-    public class DummyContext : DbContext
+    public class DummyContext : DbContext, IDisposable
     {
         public DummyContext(DbContextOptions<DummyContext> options)
            : base(options)
@@ -14,5 +14,6 @@ namespace Dummy.Models
         }
 
         public DbSet<DummyModel> UserTest { get; set; }
+        public virtual DbSet<DummyModel> User_Test { get; set; }
     }
 }
