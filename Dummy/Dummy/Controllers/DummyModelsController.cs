@@ -21,10 +21,7 @@ namespace Dummy.Controllers
             _context = context;
         }
 
-        public DummyModelsController()
-        {
-        }
-
+       
         // GET: api/DummyModels
         [HttpGet]
         public async Task<ActionResult<IEnumerable<DummyModel>>> GetTodoItems()
@@ -71,10 +68,10 @@ namespace Dummy.Controllers
         public async Task<ActionResult<DummyModel>> Register(DummyModel dummyModel)
         {
             _context.UserTest.Add(dummyModel);
-            _context.User_Test.Add(dummyModel);
+           // _context.User_Test.Add(dummyModel);
             await _context.SaveChangesAsync();
 
-            var dModel = _context.UserTest.FirstOrDefault(user => user.Username == dummyModel.Username);
+           // var dModel = _context.UserTest.FirstOrDefault(user => user.Username == dummyModel.Username);
             return CreatedAtAction("GetDummyModel", new { id = dummyModel.Id }, dummyModel);
            // return dModel;
         }

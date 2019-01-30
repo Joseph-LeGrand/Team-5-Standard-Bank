@@ -17,23 +17,26 @@ namespace Tests
 {
     public class Tests
     {
-        private DummyModelsController dummyController; 
+        
 
         [SetUp]
         public void Setup()
         {
-            var context = Telerik.JustMock.Mock.Create<DummyContext>();
-            dummyController = new DummyModelsController(context);
+            
+            
         }
 
         [Test]
         public void InitTest()
         {
             //Arrange
-            string result = dummyController.Init();
+            var context = Telerik.JustMock.Mock.Create<DummyContext>();
+        DummyModelsController dummyController = new DummyModelsController(context);
 
-            //Act
+        //Act
+        string result = dummyController.Init();
 
+           
             //Assert
             Assert.AreEqual("Intial Test works", result);
         }
@@ -43,30 +46,41 @@ namespace Tests
         [Test]
         public async Task RegisterTestAsync()
         {
+            var context = Telerik.JustMock.Mock.Create<DummyContext>();
+            DummyModelsController dummyController = new DummyModelsController(context);
+
             var dummyModel = Telerik.JustMock.Mock.Create<DummyModel>();
             dummyModel.FirstName = "Mpinane";
             dummyModel.LastName = "Mohale";
             dummyModel.Password = "nane";
             dummyModel.Username = "mpi";
+            dummyModel.Id = 5;
+
 
             //Act
             var registeredUser = await dummyController.Register(dummyModel);
 
+            //int x = 0;
             //Assert
-            Assert.AreEqual(Microsoft.AspNetCore.Http.StatusCodes.Status201Created, registeredUser);
+           // Assert.AreEqual(context.UserTest.Find(, registeredUser);
+            Assert.AreEqual("Microsoft.AspNetCore.Mvc.ActionResult`1[Dummy.Models.DummyModel]", registeredUser.ToString());
 
-            //Microsoft.AspNetCore.Http.StatusCodes.Status201Created);
+            
         }
 
 
-        /*
+        
         [Test]
         public async Task CreateBlog_saves_a_blog_via_contextAsync()
         {
+            var context = Telerik.JustMock.Mock.Create<DummyContext>();
+            DummyModelsController dummyController = new DummyModelsController(context);
+
+
             var mockSet = new Moq.Mock<DbSet<DummyModel>>();
 
             var mockContext = new Moq.Mock<DummyContext>();
-            mockContext.Setup(m => m.User_Test).Returns(mockSet.Object);
+            mockContext.Setup(m => m.UserTest).Returns(mockSet.Object);
 
             var controller = new DummyModelsController(mockContext.Object);
             await controller.Register(new DummyModel { FirstName = "Mpinane", LastName = "Mohale", Username = "mpi", Password = "nane" });
@@ -75,7 +89,7 @@ namespace Tests
             mockSet.Verify(m => m.Add(It.IsAny<DummyModel>()), Times.Once());
             mockContext.Verify(m => m.SaveChanges(), Times.Once());
         }
-        */
+        
 
 
 
