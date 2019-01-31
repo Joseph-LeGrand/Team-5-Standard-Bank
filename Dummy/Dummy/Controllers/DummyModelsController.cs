@@ -75,7 +75,17 @@ namespace Dummy.Controllers
             _context.UserTest.Add(dummyModel);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetDummyModel", new { id = dummyModel.Id }, dummyModel);
+            var user = _context.UserTest.FirstOrDefault(x => x.Username == dummyModel.Username);
+
+            if (user == null)
+            {
+                return CreatedAtAction("GetDummyModel", new { id = dummyModel.Id }, dummyModel);
+            }
+            else
+                return Conflict("User already exists");
+
+
+            
         }
 
         // POST: api/DummyModels
@@ -91,7 +101,7 @@ namespace Dummy.Controllers
             if (passwordHash != user.Password)
             {
 
-                ModelState.AddModelError("", "The username/password is incorrect");
+               return  Conflict("The username/password is incorrect");
             }
             return Ok(user);
             //return CreatedAtAction("User logged in", new { id = user.Id }, user);
