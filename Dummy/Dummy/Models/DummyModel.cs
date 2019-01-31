@@ -11,6 +11,7 @@ namespace Dummy.Models
     {
         
         public long Id { get; set; }
+        [MinLength(3)]
         public string FirstName { get; set; }
         public string LastName { get; set; }
         [Required]

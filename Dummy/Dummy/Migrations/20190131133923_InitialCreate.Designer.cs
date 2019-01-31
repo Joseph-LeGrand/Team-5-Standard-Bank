@@ -3,14 +3,16 @@ using Dummy.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Dummy.Migrations
 {
     [DbContext(typeof(DummyContext))]
-    partial class DummyContextModelSnapshot : ModelSnapshot
+    [Migration("20190131133923_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -20,12 +22,11 @@ namespace Dummy.Migrations
 
             modelBuilder.Entity("Dummy.Models.DummyModel", b =>
                 {
-                    b.Property<string>("Username")
-                        .ValueGeneratedOnAdd();
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("FirstName");
-
-                    b.Property<long>("Id");
 
                     b.Property<string>("LastName");
 
@@ -33,7 +34,9 @@ namespace Dummy.Migrations
 
                     b.Property<string>("Salt");
 
-                    b.HasKey("Username");
+                    b.Property<string>("Username");
+
+                    b.HasKey("Id");
 
                     b.ToTable("UserTest");
                 });
