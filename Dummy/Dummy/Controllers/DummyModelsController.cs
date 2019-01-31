@@ -72,13 +72,14 @@ namespace Dummy.Controllers
             string passwordHash = Hash.Create(dummyModel.Password, salt);
             dummyModel.Password = passwordHash;
             dummyModel.Salt = salt;
-            _context.UserTest.Add(dummyModel);
-            await _context.SaveChangesAsync();
+
 
             var user = _context.UserTest.FirstOrDefault(x => x.Username == dummyModel.Username);
 
             if (user == null)
             {
+                _context.UserTest.Add(dummyModel);
+                await _context.SaveChangesAsync();
                 return CreatedAtAction("GetDummyModel", new { id = dummyModel.Id }, dummyModel);
             }
             else
