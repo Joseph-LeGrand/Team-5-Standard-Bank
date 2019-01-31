@@ -53,8 +53,6 @@ namespace Dummy.Controllers
         [Route("users/editUser")]
         public async Task<IActionResult> PutDummyModel(long id,[FromBody] DummyModel dummyModel)
         {
-           
-
             var entry = _context.UserTest.FirstOrDefault(x => x.Id == id);
             entry.FirstName = dummyModel.FirstName;
             entry.LastName = dummyModel.LastName;
@@ -106,7 +104,7 @@ namespace Dummy.Controllers
             var dummyModel = await _context.UserTest.FindAsync(id);
             if (dummyModel == null)
             {
-                return NotFound();
+               return NotFound();
             }
 
             _context.UserTest.Remove(dummyModel);
