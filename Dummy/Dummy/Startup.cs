@@ -31,7 +31,7 @@ namespace Dummy
             }
 
             );
-            var connection = @"Server=(localdb)\MSSQLLocalDB;Database=testingDB;User Id=;Password=;";
+            var connection = @"Server=dev.retrotest.co.za;Database=stdbank;User Id=group5;Password=SVgY!y_FUU7Sk_5c;";
 
             services.AddDbContext<DummyContext>
                  (options => options.UseSqlServer(connection));
