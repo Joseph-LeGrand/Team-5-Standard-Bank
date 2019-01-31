@@ -74,7 +74,7 @@ namespace Dummy.Controllers
             dummyModel.Salt = salt;
             _context.UserTest.Add(dummyModel);
             await _context.SaveChangesAsync();
-
+            //var dummymodel =new Models(nameof=sdfds,name)
             return CreatedAtAction("GetDummyModel", new { id = dummyModel.Id }, dummyModel);
         }
 
