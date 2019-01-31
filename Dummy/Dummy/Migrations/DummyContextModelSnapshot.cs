@@ -32,7 +32,8 @@ namespace Dummy.Migrations
 
                     b.Property<string>("Salt");
 
-                    b.Property<string>("Username");
+                    b.Property<string>("Username")
+                        .IsRequired();
 
                     b.HasKey("Id");
 

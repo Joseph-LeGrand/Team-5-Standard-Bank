@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Telerik.JustMock;
 using Microsoft.EntityFrameworkCore;
 using Dummy.Models;
 
@@ -15,30 +16,73 @@ namespace Dummy.Controllers
     {
         private DummyContext _context;
         private Authentication _authentication;
-        private DummyModel _dummy;
 
         public DummyModelsController(DummyContext context)
         {
             _context = context;
         }
 
-        //public DummyModelsController()
-        //{
-        //}
+
+        public string Init()
+        {
+            return "Intial Test works";
+        }
+
+        [HttpPost]
+        [Route("users/register")]
+        public  ActionResult Register(DummyModel dummyModel)
+        {
+            
+                string salt = Salt.Create();
+            string passwordHash = Hash.Create(dummyModel.Password, salt);
+            dummyModel.Password = passwordHash;
+            dummyModel.Salt = salt;
+
+            _context.Add(dummyModel);
+            
+            var x = _context.SaveChanges();
+
+
+            if (x  == 0)
+            {
+                return Conflict();
+            }
+
+            return Ok();
+        }
+
+        // GET: api/DummyModels
+        [HttpGet]
+        [Route("users/login")]
+        public ActionResult<DummyModel> Login(string username, string pass)
+        {
+            var user = _context.DummyModel.FirstOrDefault(x => x.Username == username);
+            string passwordHash = Hash.Create(pass, user.Salt);
+            //var password = _authentication.VerifyPassword(passwordHash, user.Password);
+
+
+            if (passwordHash != user.Password)
+            {
+                ModelState.AddModelError("", "The username/password is incorrect");
+                return Unauthorized();
+            }
+            return Ok(user);
+        }
+
 
         // GET: api/DummyModels
         [HttpGet]
         public async Task<ActionResult<IEnumerable<DummyModel>>> GetTodoItems()
         {
-            return await _context.UserTest.ToListAsync();
+            return await _context.DummyModel.ToListAsync();
         }
 
         // GET: api/DummyModels/5
         [HttpGet("{id}")]
         [Route("users/getUser")]
-        public async Task<ActionResult<DummyModel>> GetDummyModel([FromQuery]long id)
+        public async Task<ActionResult<DummyModel>> GetDummyModel(long id)
         {
-            var dummyModel = await _context.UserTest.FindAsync(id);
+            var dummyModel = await _context.DummyModel.FindAsync(id);
 
             if (dummyModel == null)
             {
@@ -51,11 +95,11 @@ namespace Dummy.Controllers
         // PUT: api/DummyModels/5
         [HttpPut("{id}")]
         [Route("users/editUser")]
-        public async Task<IActionResult> PutDummyModel(long id,[FromBody] DummyModel dummyModel)
+        public async Task<IActionResult> PutDummyModel(long id, [FromBody] DummyModel dummyModel)
         {
-           
 
-            var entry = _context.UserTest.FirstOrDefault(x => x.Id == id);
+
+            var entry = _context.DummyModel.FirstOrDefault(x => x.Id == id);
             entry.FirstName = dummyModel.FirstName;
             entry.LastName = dummyModel.LastName;
             entry.Username = dummyModel.Username;
@@ -64,52 +108,24 @@ namespace Dummy.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
-            
-        }
-        [HttpPost]
-        [Route("users/register")]
-        public async Task<ActionResult<DummyModel>> Register(DummyModel dummyModel)
-        {
-            string salt = Salt.Create();
-            string passwordHash = Hash.Create(dummyModel.Password, salt);
-            dummyModel.Password = passwordHash;
-            dummyModel.Salt = salt;
-            _context.UserTest.Add(dummyModel);
-            await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetDummyModel", new { id = dummyModel.Id }, dummyModel);
         }
 
-        // POST: api/DummyModels
-        [HttpPost]
-        [Route("users/Login")]
-        public async Task<ActionResult<DummyModel>> Login(string username, string pass)
-        {
-            var user = _context.UserTest.FirstOrDefault(x => x.Username == username);
-            string passwordHash = Hash.Create(pass, user.Salt);
-            //var password = _authentication.VerifyPassword(passwordHash, user.Password);
+       
 
 
-            if (passwordHash != user.Password)
-            {
-
-                ModelState.AddModelError("", "The username/password is incorrect");
-            }
-            return Ok(user);
-            //return CreatedAtAction("User logged in", new { id = user.Id }, user);
-        }
         // DELETE: api/DummyModels/5
         [HttpDelete("{id}")]
         [Route("users/delete")]
         public async Task<ActionResult<DummyModel>> DeleteDummyModel(long id)
         {
-            var dummyModel = await _context.UserTest.FindAsync(id);
+            var dummyModel = await _context.DummyModel.FindAsync(id);
             if (dummyModel == null)
             {
                 return NotFound();
             }
 
-            _context.UserTest.Remove(dummyModel);
+            _context.DummyModel.Remove(dummyModel);
             await _context.SaveChangesAsync();
 
             return dummyModel;
@@ -117,14 +133,9 @@ namespace Dummy.Controllers
 
         private bool DummyModelExists(long id)
         {
-            return _context.UserTest.Any(e => e.Id == id);
+            return _context.DummyModel.Any(e => e.Id == id);
         }
 
-        public string Init()
-        {
-            return "Intial Test works";
-        }
-
-
+        
     }
 }

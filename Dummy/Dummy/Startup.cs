@@ -1,4 +1,5 @@
 ﻿using Dummy.Models;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -30,12 +31,18 @@ namespace Dummy
             }
 
             );
-            var connection = @"Server=(localdb)\MSSQLLocalDB;Database=testingDB;User Id=;Password=;";
+            var connection = @"Server=dev.retrotest.co.za;Database=stdbank;User Id=group5;Password=SVgY!y_FUU7Sk_5c";
 
             services.AddDbContext<DummyContext>
                  (options => options.UseSqlServer(connection));
 
-
+           /* services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = AuthenticationOptions.DefaultScheme;
+                options.DefaultChallengeScheme = AuthenticationOptions.DefaultScheme;
+            }).AddBasicTokenAuthentication();
+            */
+            services.AddCors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -51,7 +58,18 @@ namespace Dummy
                 app.UseHsts();
             }
 
+            // Shows UseCors with CorsPolicyBuilder.
+            //app.UseCors(builder =>
+              // builder.WithOrigins("http://localhost:8081"));
+            app.UseCors(o => o.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader());
+
             app.UseHttpsRedirection();
+            if (Configuration["EnableCORS"] == "True")
+            {
+                
+            }
             app.UseMvc();
             app.UseSwagger();
             app.UseSwaggerUI(x =>

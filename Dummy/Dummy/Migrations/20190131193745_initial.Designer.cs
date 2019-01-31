@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dummy.Migrations
 {
     [DbContext(typeof(DummyContext))]
-    [Migration("20190128191239_initCreate")]
-    partial class initCreate
+    [Migration("20190131193745_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -32,11 +32,14 @@ namespace Dummy.Migrations
 
                     b.Property<string>("Password");
 
-                    b.Property<string>("Username");
+                    b.Property<string>("Salt");
+
+                    b.Property<string>("Username")
+                        .IsRequired();
 
                     b.HasKey("Id");
 
-                    b.ToTable("UserTest");
+                    b.ToTable("DummyModel");
                 });
 #pragma warning restore 612, 618
         }
