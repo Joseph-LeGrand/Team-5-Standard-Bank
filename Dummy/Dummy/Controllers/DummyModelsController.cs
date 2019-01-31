@@ -120,6 +120,11 @@ namespace Dummy.Controllers
             return _context.UserTest.Any(e => e.Id == id);
         }
 
+        public string Init()
+        {
+            return "Intial Test works";
+        }
+
 
     }
 }
