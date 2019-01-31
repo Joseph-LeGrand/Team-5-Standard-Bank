@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dummy.Migrations
 {
     [DbContext(typeof(DummyContext))]
-    [Migration("20190128191239_initCreate")]
-    partial class initCreate
+    [Migration("20190131140425_userNameUnique1")]
+    partial class userNameUnique1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -22,19 +22,20 @@ namespace Dummy.Migrations
 
             modelBuilder.Entity("Dummy.Models.DummyModel", b =>
                 {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<string>("Username")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("FirstName");
+
+                    b.Property<long>("Id");
 
                     b.Property<string>("LastName");
 
                     b.Property<string>("Password");
 
-                    b.Property<string>("Username");
+                    b.Property<string>("Salt");
 
-                    b.HasKey("Id");
+                    b.HasKey("Username");
 
                     b.ToTable("DummyModel");
                 });

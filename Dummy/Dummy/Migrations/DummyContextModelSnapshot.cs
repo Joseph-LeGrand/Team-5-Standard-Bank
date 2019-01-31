@@ -20,11 +20,12 @@ namespace Dummy.Migrations
 
             modelBuilder.Entity("Dummy.Models.DummyModel", b =>
                 {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<string>("Username")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("FirstName");
+
+                    b.Property<long>("Id");
 
                     b.Property<string>("LastName");
 
@@ -32,11 +33,9 @@ namespace Dummy.Migrations
 
                     b.Property<string>("Salt");
 
-                    b.Property<string>("Username");
+                    b.HasKey("Username");
 
-                    b.HasKey("Id");
-
-                    b.ToTable("UserTest");
+                    b.ToTable("DummyModel");
                 });
 #pragma warning restore 612, 618
         }

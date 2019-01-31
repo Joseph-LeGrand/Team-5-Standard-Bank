@@ -8,7 +8,7 @@ namespace Dummy.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "UserTest",
+                name: "DummyModel",
                 columns: table => new
                 {
                     Id = table.Column<long>(nullable: false)
@@ -20,14 +20,14 @@ namespace Dummy.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserTest", x => x.Id);
+                    table.PrimaryKey("PK_DummyModel", x => x.Id);
                 });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "UserTest");
+                name: "DummyModel");
         }
     }
 }

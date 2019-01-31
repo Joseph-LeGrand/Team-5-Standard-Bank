@@ -8,7 +8,7 @@ namespace Dummy.Migrations
         {
             migrationBuilder.AddColumn<string>(
                 name: "Salt",
-                table: "UserTest",
+                table: "DummyModel",
                 nullable: true);
         }
 
@@ -16,7 +16,7 @@ namespace Dummy.Migrations
         {
             migrationBuilder.DropColumn(
                 name: "Salt",
-                table: "UserTest");
+                table: "DummyModel");
         }
     }
 }

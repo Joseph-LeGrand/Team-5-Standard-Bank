@@ -38,7 +38,7 @@ namespace Dummy.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("UserTest");
+                    b.ToTable("DummyModel");
                 });
 #pragma warning restore 612, 618
         }
