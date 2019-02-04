@@ -56,16 +56,15 @@ namespace Dummy.Controllers
         [Route("users/login")]
         public ActionResult<DummyModel> Login(string username, string pass)
         {
-            var user = _context.DummyModel.FirstOrDefault(x => x.Username == username);
+            var user = _context.DummyModel.Find(username);
             string passwordHash = Hash.Create(pass, user.Salt);
-            //var password = _authentication.VerifyPassword(passwordHash, user.Password);
-
 
             if (passwordHash != user.Password)
             {
                 ModelState.AddModelError("", "The username/password is incorrect");
                 return Unauthorized();
             }
+
             return Ok(user);
         }
 
