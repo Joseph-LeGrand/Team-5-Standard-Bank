@@ -14,7 +14,12 @@ namespace Dummy.Models
 
         }
 
-       
+        public DummyContext()
+        {
+
+        }
+
+
 
         public virtual DbSet<DummyModel> DummyModel { get; set; }
 
